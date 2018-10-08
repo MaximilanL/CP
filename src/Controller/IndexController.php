@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
+use App\Entity\Question;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +23,8 @@ class IndexController extends Controller
      */
     public function admin()
     {
-        return $this->render('main.html.twig');
+
+        return $this->render('Quizes/main.html.twig');
     }
 
 
