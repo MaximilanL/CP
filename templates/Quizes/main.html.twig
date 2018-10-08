@@ -20,7 +20,32 @@
             </div>
         </div>
     </nav>
-    Welcome {{ app.user.username }} !
-        
+
+    <div class="container">
+        <h4>Welcome {{ app.user.username }}! Choose the quiz and test yourself!</h4>
+    </div>
+    <div class="container">
+    {% if quizes %}
+        <table id="articles" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Quiz Title</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for quiz in quizes %}
+                <tr>
+                    <td>{{ quiz.name }}</td>
+                    <td>
+                        <a href="#" class="btn btn-dark">Start</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No quizes to display</p>
+    {% endif %}</div>
 {% endblock %}
 
