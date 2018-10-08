@@ -21,4 +21,7 @@
 /%PUBLIC_DIR%/build/
 npm-debug.log
 yarn-error.log
+webpack.config.js
+yarn.lock
+package.json
 ###< symfony/webpack-encore-pack ###

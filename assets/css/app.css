@@ -12,10 +12,11 @@ body {
     width: 20vw;
 }
 
-.login {
-    margin-top: 90px;
+.formSecurity{
+    margin-top: 50px;
     width: 500px;
 }
+
 
 .center {
     display: block;

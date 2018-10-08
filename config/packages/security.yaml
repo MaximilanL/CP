@@ -28,4 +28,3 @@ security:
     access_control:
         - { path: '^/admin', roles: ROLE_ADMIN }
         - { path: '^/main', roles: [ROLE_ADMIN, ROLE_USER] }
-        - { path: '^/login', roles: [ROLE_ADMIN, ROLE_USER] }

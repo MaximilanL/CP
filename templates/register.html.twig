@@ -2,14 +2,21 @@
 
 {% block body %}
 
-{{ form_start(form) }}
-    {{ form_row(form.fullName) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.password.first) }}
-    {{ form_row(form.password.second) }}
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
-    <button type="submit">SignIn</button>
-{{ form_end(form) }}
+
+    <div class="container formSecurity">
+        <legend class="text-center">Registration</legend>
+        {{ form_start(form) }}
+            {{ form_row(form.fullName) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password.first) }}
+            {{ form_row(form.password.second) }}
+
+            <button type="submit" class="btn btn-primary center">Sign in</button>
+        {{ form_end(form) }}
+    </div>
+
 
 {% endblock %}
