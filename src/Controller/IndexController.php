@@ -17,11 +17,11 @@ class IndexController extends Controller
     }
 
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/main", name="main")
      */
     public function admin()
     {
-        return $this->render('Admin/index.html.twig');
+        return $this->render('main.html.twig');
     }
 
 
