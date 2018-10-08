@@ -1,0 +1,25 @@
+body {
+    background-color: #f7f7f9;
+}
+
+.jumbotron {
+    text-align: center;
+    width: 80vw;
+    margin: 80px auto;
+}
+
+.jumbotron>.line {
+    width: 20vw;
+}
+
+.login {
+    margin-top: 90px;
+    width: 500px;
+}
+
+.center {
+    display: block;
+    margin: 0 auto;
+    margin-top: 25px;
+}
+
