@@ -35,6 +35,7 @@ class IndexController extends Controller
     public function show($id)
     {
         $quiz= $this->getDoctrine()->getRepository(Quizes::class)->find($id);
+        $questions= $this->getDoctrine()->getRepository(Question::class)->findAll();
         return $this->render('Quizes/show.html.twig', array('quiz' => $quiz));
     }
 }
