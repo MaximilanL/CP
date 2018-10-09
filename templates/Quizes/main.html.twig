@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Welcome!{% endblock %}
 {% block body %}
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
         <div class="container">
@@ -38,7 +38,7 @@
                 <tr>
                     <td>{{ quiz.name }}</td>
                     <td>
-                        <a href="#" class="btn btn-dark">Start</a>
+                        <a href="/quiz/{{ quiz.id }}" class="btn btn-dark">Start</a>
                     </td>
                 </tr>
             {% endfor %}

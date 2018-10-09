@@ -29,5 +29,12 @@ class IndexController extends Controller
         return $this->render('Quizes/main.html.twig', array('quizes' => $quizes));
     }
 
-
+    /**
+     * @Route("/quiz/{id}", name="quiz_show")
+     */
+    public function show($id)
+    {
+        $quiz= $this->getDoctrine()->getRepository(Quizes::class)->find($id);
+        return $this->render('Quizes/show.html.twig', array('quiz' => $quiz));
+    }
 }
