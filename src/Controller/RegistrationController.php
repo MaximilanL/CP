@@ -17,10 +17,13 @@ class RegistrationController extends Controller
     /**
      * @Route("/register", name="user_registration")
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher)
-    {
-    
+    public function registerAction(
+        Request                      $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        EventDispatcherInterface     $eventDispatcher
+    ) {
         $user = new User();
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
@@ -29,19 +32,16 @@ class RegistrationController extends Controller
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-
             $user->setRoles(['ROLE_USER']);
-
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-
             $event = new GenericEvent($user);
             $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
 
-            return $this->redirectToRoute('security_login');
+            return $this->redirectToRoute('main');
         }
 
         return $this->render(
