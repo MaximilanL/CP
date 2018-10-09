@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Answer;
@@ -22,12 +24,9 @@ class IndexController extends Controller
     /**
      * @Route("/main", name="main")
      */
-    public function admin()
+    public function main()
     {
-
-        $quizes= $this->getDoctrine()->getRepository(Quizes::class)->findAll();
+        $quizes = $this->getDoctrine()->getRepository(Quizes::class)->findAll();
         return $this->render('Quizes/main.html.twig', array('quizes' => $quizes));
     }
-
-
 }
