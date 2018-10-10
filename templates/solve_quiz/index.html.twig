@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block title %}Welcome!{% endblock %}
+
+{% block title %}Quiz{% endblock %}
+
 {% block body %}
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
         <div class="container">
@@ -24,28 +26,29 @@
     <div class="container">
         <h4>Welcome {{ app.user.username }}! Choose the quiz and test yourself!</h4>
     </div>
-    <div class="container">
-    {% if quizes %}
-        <table id="articles" class="table table-striped">
-            <thead>
-            <tr>
-                <th>Quiz Title</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for quiz in quizes %}
-                <tr>
-                    <td>{{ quiz.name }}</td>
-                    <td>
-                        <a href="/quiz/{{ quiz.id }}" class="btn btn-dark">Start</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No quizes to display</p>
-    {% endif %}</div>
-{% endblock %}
 
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Percentage correctness to win</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for quiz in quizzes %}
+            <tr>
+                <td>{{ quiz.title }}</td>
+                <td>{{ quiz.percentageCorrectnessToWin }}</td>
+                <td>
+                    <a href="{{ path('solve_quiz_by_id', {'id': quiz.id}) }}" class="btn btn-outline-secondary btn-sm">solve!</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No quizzes found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
