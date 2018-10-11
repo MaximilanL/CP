@@ -3,58 +3,38 @@
 {% block title %}Quiz{% endblock %}
 
 {% block body %}
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
-        <div class="container">
-            <a href="/" class="navbar-brand">BestQuizes</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
-                <span class="navbar-toggle-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="mobile-nav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                       <strong><a href="{{ path('quiz_index') }}" class="nav-link">CREATE QUIZ</a></strong>
-                    </li>
-                    <li class="nav-item">
-                        <strong><a href="#" class="nav-link">CONTROL USER</a></strong>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/main" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/logout" class="nav-link">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
         <h4>Welcome {{ app.user.username }}! Choose the quiz and test yourself!</h4>
     </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Percentage correctness to win</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for quiz in quizzes %}
+    <div class="container">
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ quiz.title }}</td>
-                <td>{{ quiz.percentageCorrectnessToWin }}</td>
-                <td>
-                    <a href="{{ path('solve_quiz_by_id', {'id': quiz.id}) }}" class="btn btn-outline-secondary btn-sm">solve!</a>
-                </td>
+                <th>Title</th>
+                <th>Percentage correctness to win</th>
+                <th>actions</th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">No quizzes found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.percentageCorrectnessToWin }}</td>
+                    <td>
+                        <a href="{{ path('solve_quiz_by_id', {'id': quiz.id}) }}" class="btn btn-outline-secondary btn-sm">solve!</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No quizzes found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container-fluid navigation">
+        {{ knp_pagination_render(quizzes) }}
+    </div>
 {% endblock %}

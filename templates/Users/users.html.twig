@@ -1,26 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
-        <div class="container">
-            <a href="/" class="navbar-brand">BestQuizes</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
-                <span class="navbar-toggle-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="mobile-nav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a href="{{ path('main') }}" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ path('security_logout') }}" class="nav-link">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
         {% if users %}
             <table id="users" class="table table-striped">
@@ -43,10 +23,12 @@
                 {% endfor %}
                 </tbody>
             </table>
+
             <div class="container-fluid navigation">
                 {{ knp_pagination_render(users) }}
             </div>
         {% else %}
             <p>No users</p>
-        {% endif %}</div>
+        {% endif %}
+    </div>
 {% endblock %}

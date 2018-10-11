@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -11,10 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+
     /**
-     * @Route("/user", name="user")
+     * @Route("/user", name="userList")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $usersRepository = $entityManager->getRepository(User::class);
@@ -34,9 +41,14 @@ class UserController extends Controller
         ]);
     }
 
+
     /**
      * @Route("/user/{id}", name="deleting_user")
+     *
      * @Method({"DELETE"})
+     *
+     * @param Request $request
+     * @param string $id
      */
     public function delete(Request $request, string $id): void
     {

@@ -11,10 +11,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class MainController extends Controller
 {
     /**
-     * @Route("/glav", name="z")
+     * @Route("/main", name="mainPage")
+     */
+    public function main(): Response
+    {
+        return $this->render('main/index.html.twig');
+    }
+
+    /**
+     * @Route("/", name="index")
      */
     public function index(): Response
     {
-        return $this->render('main/index.html.twig');
+        return $this->render('index.html.twig');
     }
 }

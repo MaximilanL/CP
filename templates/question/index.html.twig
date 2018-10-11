@@ -3,35 +3,45 @@
 {% block title %}Question index{% endblock %}
 
 {% block body %}
-    <h1>Question index</h1>
+    <div class="container">
+        <h1>Question index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Content</th>
-                <th>Quiz title</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for question in questions %}
-            <tr>
-                <td>{{ question.id }}</td>
-                <td>{{ question.content }}</td>
-                <td>{{ question.quiz.title }}</td>
-                <td>
-                    <a href="{{ path('question_show', {'id': question.id}) }}" class="btn btn-outline-secondary btn-sm">show</a>
-                    <a href="{{ path('question_edit', {'id': question.id}) }}" class="btn btn-outline-secondary btn-sm">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Content</th>
+                    <th>Quiz title</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for question in questions %}
+                <tr>
+                    <td>{{ question.id }}</td>
+                    <td>{{ question.content }}</td>
+                    <td>{{ question.quiz.title }}</td>
+                    <td>
+                        <a href="{{ path('question_show', {'id': question.id}) }}" class="btn btn-outline-secondary btn-sm">show</a>
+                        <a href="{{ path('question_edit', {'id': question.id}) }}" class="btn btn-outline-secondary btn-sm">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('question_new') }}" class="btn btn-outline-primary">Create new</a>
+    <div class="container text-center">
+        <a href="{{ path('question_new') }}" class="btn btn-outline-primary">Create new</a>
+    </div>
+
+    <div class="container-fluid navigation">
+        {{ knp_pagination_render(questions) }}
+    </div>
+
+
 {% endblock %}

@@ -20,10 +20,20 @@ class QuizController extends Controller
     /**
      * @Route("/", name="quiz_index", methods="GET")
      */
-    public function index(QuizRepository $quizRepository): Response
+    public function index(Request $request, QuizRepository $quizRepository): Response
     {
+        $allQuizzesQuery = $quizRepository->findAll();
+
+        $paginator  = $this->get('knp_paginator');
+
+        $quizzes = $paginator->paginate(
+            $allQuizzesQuery,
+            $request->query->getInt('page', 1),
+            6
+        );
+
         return $this->render('quiz/index.html.twig', [
-            'quizzes' => $quizRepository->findAll()
+            'quizzes' => $quizzes
         ]);
     }
 

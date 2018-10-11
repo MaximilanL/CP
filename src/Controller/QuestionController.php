@@ -21,10 +21,20 @@ class QuestionController extends Controller
     /**
      * @Route("/", name="question_index", methods="GET")
      */
-    public function index(QuestionRepository $questionRepository): Response
+    public function index(Request $request, QuestionRepository $questionRepository): Response
     {
+        $allQuestionsQuery = $questionRepository->findAll();
+
+        $paginator  = $this->get('knp_paginator');
+
+        $questions = $paginator->paginate(
+            $allQuestionsQuery,
+            $request->query->getInt('page', 1),
+            6
+        );
+
         return $this->render('question/index.html.twig', [
-            'questions' => $questionRepository->findAll(),
+            'questions' => $questions,
         ]);
     }
 
