@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach ($this->getUserData() as [$fullname, $username, $password, $email, $roles]) {
             $user = new User();
@@ -36,7 +36,6 @@ class AppFixtures extends Fixture
     private function getUserData(): array
     {
         return [
-            // $userData = [$fullname, $username, $password, $email, $roles];
             ['admin', 'admin', 'admin', 'admin@mail.com', ['ROLE_ADMIN']],
             ['root', 'root', 'root', 'root@mail.com', ['ROLE_ADMIN']],
             ['helper', 'helper', 'helper', 'helper@mail.com', ['ROLE_ADMIN']],
