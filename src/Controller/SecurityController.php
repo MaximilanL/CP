@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\EmailResetType;
+use App\Form\PasswordResetType;
 use App\Form\UserType;
 use App\Entity\User;
 use App\Events;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -71,5 +72,88 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         throw new \Exception('This should never be reached!');
+    }
+
+    /**
+     * @Route("/resetPassword", name="resetPassword")
+     *
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return Response
+     */
+    public function resetPassword(Request $request, \Swift_Mailer $mailer): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createForm(EmailResetType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $entityManager
+                ->getRepository(User::class)
+                ->findOneBy(['email' => $form->getData()['email']]);
+            if ($user !== null) {
+                $token = uniqid();
+                $user->setResetPassword($token);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $message = (new \Swift_Message('Restoring password'))
+                    ->setFrom('traheia23@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'Emails/recovery_password.html.twig', [
+                            'token' => $token,
+                        ]),
+                        'text/html'
+                    );
+
+                $mailer->send($message);
+
+                return $this->render('Security/Reset/reset-password-confirmation.html.twig');
+            }
+        }
+
+        return $this->render('Security/Reset/reset-password.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @Route("/resetPassword/{token}", name="restore")
+     *
+     * @param Request $request
+     * @param string $token
+     * @return Response
+     */
+    public function restore(Request $request, string $token, UserPasswordEncoderInterface $encoder): Response
+    {
+        if ($token !== null) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager
+                ->getRepository(User::class)
+                ->findOneBy(['resetPassword' => $token]);
+
+            if ($user !== null) {
+                $form = $this->createForm(PasswordResetType::class, $user);
+
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $password = $encoder->encodePassword($user, $user->getPlainPassword());
+                    $user->setPassword($password);
+                    $user->setResetPassword("");
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('security_login');
+                }
+
+                return $this->render('Security/Reset/reset-password-token.html.twig', array(
+                    'form' => $form->createView(),
+                ));
+            }
+        }
+
+        throw new \Exception("Something get wrong, try again later");
     }
 }

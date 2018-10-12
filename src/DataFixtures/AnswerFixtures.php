@@ -18,7 +18,7 @@ class AnswerFixtures extends Fixture implements OrderedFixtureInterface
             $answer = new Answer();
             $answer->setContent('answer content ' . $i);
             $answer->setIsCorrect(\mt_rand(0, 1) == 1);
-            $question = $manager->find(Question::class, \mt_rand(1, 99));
+            $question = $manager->find(Question::class, \mt_rand(9, 99));
             $answer->setQuestion($question);
             $manager->persist($answer);
         }

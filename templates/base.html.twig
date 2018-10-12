@@ -13,32 +13,33 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
-            <div class="container">
-                <a href="{{ path('main') }}" class="navbar-brand">BestQuizes</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
-                    <span class="navbar-toggle-icon"></span>
-                </button>
+        {% block navbar %}
+            <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
+                <div class="container">
+                    <a href="{{ path('main') }}" class="navbar-brand">BestQuizes</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
+                        <span class="navbar-toggle-icon"></span>
+                    </button>
 
-                <div class="collapse navbar-collapse" id="mobile-nav">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="{{ path('quiz_index') }}" class="nav-link">Create new quiz</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('userList') }}" class="nav-link">User control</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path('main') }}" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ path("security_logout") }}" class="nav-link">Logout</a>
-                        </li>
-                    </ul>
+                    <div class="collapse navbar-collapse" id="mobile-nav">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a href="{{ path('quiz_index') }}" class="nav-link">Create new quiz</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ path('userList') }}" class="nav-link">User control</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ path('main') }}" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ path("security_logout") }}" class="nav-link">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-        {% block navbar %}{% endblock %}
+            </nav>
+        {% endblock %}
 
         {% block body %}{% endblock %}
 
