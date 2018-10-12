@@ -15,7 +15,7 @@ class QuizFixtures extends Fixture implements OrderedFixtureInterface
     {
         for ($i = 0; $i < 10; $i++) {
             $quiz = new Quiz();
-            $quiz->setTitle('quiz title' . $i);
+            $quiz->setTitle('quiz title ' . $i);
             $quiz->setPercentageCorrectnessToWin(80 + $i);
             $manager->persist($quiz);
         }

@@ -63,6 +63,31 @@ class User implements UserInterface, \Serializable
      */
     private $roles = [];
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetPassword;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    public function getResetPassword(): ?string
+    {
+        return $this->resetPassword;
+    }
+
+    public function setResetPassword(string $resetPassword): self
+    {
+        $this->resetPassword = $resetPassword;
+
+        return $this;
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -109,6 +134,15 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
     }
 
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
 
     public function getRoles(): array
     {
