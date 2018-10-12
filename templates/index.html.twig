@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
-{% block title %}Welcome!{% endblock %}
+
+{% block title %}Welcome page!{% endblock %}
+
+{% block nav %}
+    {% include('Security/nav-security.html.twig') %}
+{% endblock %}
+
 {% block body %}
-    {% block nav %}{% endblock %}
     <div class="jumbotron">
         <h1 class="display-4">Welcome to our quiz!</h1>
         <p class="lead">Take part in quizzes and become the best!</p>
         <hr class="my-4">
         <p>Please login or signup to start.</p>
-        <p class="lead">
+        <div class="lead">
             <a class="btn btn-primary btn-lg" href="{{ path('security_login')}}" role="button">Login</a>
             <a class="btn btn-primary btn-lg" href="{{ path('user_registration')}}" role="button">Sign Up</a>
-            <hr class="line" />
+            <hr class="line">
             <a class="btn btn-outline-secondary" href="{{ path('resetPassword')}}" role="button">Forgot password?</a>
-        </p>
+        </div>
     </div>
 {% endblock %}
-
-
-

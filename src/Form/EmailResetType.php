@@ -20,9 +20,6 @@ class EmailResetType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Enter your email'
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Confirm'
             ]);
         ;
     }

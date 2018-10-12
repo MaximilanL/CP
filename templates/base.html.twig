@@ -17,6 +17,7 @@
             <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
                 <div class="container">
                     <a href="{{ path('main') }}" class="navbar-brand">BestQuizes</a>
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
                         <span class="navbar-toggle-icon"></span>
                     </button>
@@ -28,23 +29,30 @@
                                     <a href="{{ path('quiz_index') }}" class="nav-link">Create new quiz</a>
                                 </li>
                                 <li class="nav-item">
-                                <a href="{{ path('userList') }}" class="nav-link">User control</a>
-                                </li>{% endif %}
-                            <li class="nav-item">
-                                <a href="{{ path('main') }}" class="nav-link">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ path("security_logout") }}" class="nav-link">Logout</a>
-                            </li>
+                                    <a href="{{ path('userList') }}" class="nav-link">User control</a>
+                                </li>
+                            {% endif %}
+                                <li class="nav-item">
+                                    <a href="{{ path('main') }}" class="nav-link">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path("security_logout") }}" class="nav-link">Logout</a>
+                                </li>
                         </ul>
                     </div>
                 </div>
             </nav>
         {% endblock %}
 
-        {% block navbar %}{% endblock %}
-
         {% block body %}{% endblock %}
+
+        <footer id="sticky">
+
+            <div>© 2018 Copyright:
+                <a href="#" class="footer-link"> Quiz.com</a>
+            </div>
+
+        </footer>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>

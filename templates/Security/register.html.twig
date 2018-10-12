@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
-{% block title %}SignUp{% endblock %}
-{% block body %}
-    {% block nav %}{% endblock %}
-    {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
+{% block title %}Registration{% endblock %}
+
+{% block nav %}
+    {% include('Security/nav-security.html.twig') %}
+{% endblock %}
+
+{% block body %}
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
 
     <div class="container formSecurity">
         <legend class="text-center">Registration</legend>

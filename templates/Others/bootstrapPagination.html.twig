@@ -2,7 +2,7 @@
     <ul class="pagination justify-content-center">
         {% if previous is defined %}
             <li class="page-item">
-                <a rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="page-link">&laquo;&nbsp; Previous</a>
+                <a rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}" class="page-link">&laquo;&nbsp; Prev</a>
             </li>
         {% else %}
             <li class="page-item disabled">

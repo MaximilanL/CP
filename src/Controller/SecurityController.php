@@ -60,10 +60,9 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('security_login');
         }
 
-        return $this->render(
-            'Security/register.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->render('Security/register.html.twig', [
+                'form' => $form->createView()
+            ]);
     }
 
     /**
@@ -81,8 +80,12 @@ class SecurityController extends AbstractController
      * @param \Swift_Mailer $mailer
      * @return Response
      */
-    public function resetPassword(Request $request, \Swift_Mailer $mailer): Response
+    public function resetPassword(
+        Request $request,
+        \Swift_Mailer $mailer
+    ): Response
     {
+        $error = "";
         $entityManager = $this->getDoctrine()->getManager();
         $form = $this->createForm(EmailResetType::class);
 
@@ -111,12 +114,15 @@ class SecurityController extends AbstractController
                 $mailer->send($message);
 
                 return $this->render('Security/Reset/reset-password-confirmation.html.twig');
+            } else {
+                $error = "Not valid email";
             }
         }
 
-        return $this->render('Security/Reset/reset-password.html.twig', array(
+        return $this->render('Security/Reset/reset-password.html.twig', [
             'form' => $form->createView(),
-        ));
+            'error' => $error
+        ]);
     }
 
     /**
@@ -126,7 +132,12 @@ class SecurityController extends AbstractController
      * @param string $token
      * @return Response
      */
-    public function restore(Request $request, string $token, UserPasswordEncoderInterface $encoder): Response
+    public function restore(
+        Request $request,
+        string $token,
+        UserPasswordEncoderInterface $encoder,
+        AuthenticationUtils $helper
+    ): Response
     {
         if ($token !== null) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -148,9 +159,10 @@ class SecurityController extends AbstractController
                     return $this->redirectToRoute('security_login');
                 }
 
-                return $this->render('Security/Reset/reset-password-token.html.twig', array(
+                return $this->render('Security/Reset/reset-password-token.html.twig', [
                     'form' => $form->createView(),
-                ));
+                    'error' => $helper->getLastAuthenticationError()
+                ]);
             }
         }
 

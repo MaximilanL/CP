@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
-{% block title %}LogIn{% endblock %}
+
+{% block title %}Log In{% endblock %}
+
+{% block nav %}
+    {% include('Security/nav-security.html.twig') %}
+{% endblock %}
+
 {% block body %}
-    {% block nav %}{% endblock %}
     {% if error %}
         <div class="alert alert-danger">
             {{ error.messageKey }}
@@ -11,7 +16,7 @@
     <div class="container formSecurity">
         <form action="{{ path('security_login') }}" method="POST">
             <fieldset>
-                <legend class="text-center">Login</legend>
+                <legend class="text-center">Log in</legend>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
@@ -21,7 +26,7 @@
                     <input type="password" id="password" name="_password" class="form-control"/>
                 </div>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                <button type="submit" class="btn btn-primary center">Login</button>
+                <button type="submit" class="btn btn-primary center">Log in</button>
             </fieldset>
         </form>
     </div>

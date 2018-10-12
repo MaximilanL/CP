@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: #f7f7f9;
 }
@@ -5,18 +10,13 @@ body {
 .jumbotron {
     text-align: center;
     width: 80vw;
-    margin: 80px auto;
-}
-
-.jumbotron>.line {
-    width: 20vw;
+    margin: 60px auto;
 }
 
 .formSecurity{
-    margin-top: 50px;
+    margin-top: 20px;
     width: 500px;
 }
-
 
 .center {
     display: block;
@@ -27,3 +27,33 @@ body {
 .navigation {
     margin-top: 40px;
 }
+
+.line {
+    width: 20vw;
+    margin: 20px auto;
+}
+
+#sticky {
+    width: 100%;
+    padding: 10px;
+    background: #78c2ad;
+    color: rgba(255,255,255,0.6);
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    border-top: 1px solid whitesmoke;
+    background-image: url(http://rs257.pbsrc.com/albums/hh234/tfm448/Snow411.gif~c200)
+}
+
+.footer-link {
+    color: rgba(255,255,255,0.6);
+}
+
+.footer-link:hover {
+    color: #fff;
+}
+

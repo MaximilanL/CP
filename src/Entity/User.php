@@ -71,7 +71,6 @@ class User implements UserInterface, \Serializable
     private $resetPassword;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
