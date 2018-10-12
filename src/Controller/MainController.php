@@ -11,14 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class MainController extends Controller
 {
     /**
-     * @Route("/main", name="mainPage")
-     */
-    public function main(): Response
-    {
-        return $this->render('main/index.html.twig');
-    }
-
-    /**
      * @Route("/", name="index")
      */
     public function index(): Response
