@@ -113,7 +113,9 @@ class SecurityController extends AbstractController
 
                 $mailer->send($message);
 
-                return $this->render('Security/Reset/reset-password-confirmation.html.twig');
+                return $this->render('Security/Reset/reset-password-confirmation.html.twig', [
+                    "message" => "You will have receive link for the reset password!"
+                ]);
             } else {
                 $error = "Not valid email";
             }
@@ -135,8 +137,7 @@ class SecurityController extends AbstractController
     public function restore(
         Request $request,
         string $token,
-        UserPasswordEncoderInterface $encoder,
-        AuthenticationUtils $helper
+        UserPasswordEncoderInterface $encoder
     ): Response
     {
         if ($token !== null) {
@@ -161,11 +162,12 @@ class SecurityController extends AbstractController
 
                 return $this->render('Security/Reset/reset-password-token.html.twig', [
                     'form' => $form->createView(),
-                    'error' => $helper->getLastAuthenticationError()
                 ]);
             }
         }
 
-        throw new \Exception("Something get wrong, try again later");
+        return $this->render('Security/Reset/reset-password-confirmation.html.twig', [
+            "message" => "Somethin get wrong. Try again later"
+        ]);
     }
 }
