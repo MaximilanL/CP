@@ -27,4 +27,6 @@ security:
 
     access_control:
         - { path: '^/user', roles: ROLE_ADMIN }
-        - { path: '^/main', roles: [ROLE_ADMIN, ROLE_USER] }
+        - { path: '^/main', roles: [ROLE_ADMIN, ROLE_USER]}
+        - { path: '^/quiz', roles: ROLE_ADMIN }
+        - { path: '^/answer', roles: ROLE_ADMIN }

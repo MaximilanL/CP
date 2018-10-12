@@ -13,7 +13,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
+    {% block nav %}<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
             <div class="container">
                 <a href="{{ path('main') }}" class="navbar-brand">BestQuizes</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
@@ -22,12 +22,13 @@
 
                 <div class="collapse navbar-collapse" id="mobile-nav">
                     <ul class="navbar-nav ml-auto">
+                        {%  if app.user.roles==["ROLE_ADMIN"] %}
                         <li class="nav-item">
                             <a href="{{ path('quiz_index') }}" class="nav-link">Create new quiz</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ path('userList') }}" class="nav-link">User control</a>
-                        </li>
+                        </li>{% endif %}
                         <li class="nav-item">
                             <a href="{{ path('main') }}" class="nav-link">Home</a>
                         </li>
@@ -37,7 +38,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>{% endblock %}
         {% block navbar %}{% endblock %}
 
         {% block body %}{% endblock %}
