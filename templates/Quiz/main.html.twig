@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz index{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Quiz Create</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Birthtime</th>
+                <th>Top player</th>
+                {%  if app.user.roles==["ROLE_ADMIN"] %}
+                    <th>Status</th>
+                {% endif %}
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.name }}</td>
+                    <td>{{ quiz.createData|date("F jS \\a\\t g:ia") }}</td>
+                    <td>
+                        {% if quiz.rating %}
+                            {{ quiz.rating.0 }}
+                        {% endif %}
+                    </td>
+                    {%  if app.user.roles==["ROLE_ADMIN"] %}
+                        <td>
+                            {% if quiz.isActive %}
+                                <a href="#" class="btn btn-outline-success btn-sm">Active</a>
+                            {% else %}
+                                <a href="#" class="btn btn-outline-danger btn-sm">Inactive</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <a href="{#{{ path('quiz_edit', {'id': quiz.id}) }}#}" class="btn btn-success btn-sm">Play</a>
+                        {%  if app.user.roles==["ROLE_ADMIN"] %}
+                            <a href="{#{{ path('quiz_edit', {'id': quiz.id}) }}#}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                            <a href="{#{{ path('quiz_show', {'id': quiz.id}) }}#}" class="btn btn-outline-secondary btn-sm">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No Quiz found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container text-center">
+        <a href="{#{{ path('quiz_new') }}#}" class="btn btn-outline-primary">Create new</a>
+    </div>
+
+    <div class="container-fluid navigation">
+        {{ knp_pagination_render(quizzes) }}
+    </div>
+
+{% endblock %}

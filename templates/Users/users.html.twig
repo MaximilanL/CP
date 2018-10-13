@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}User control{% endblock %}
+
 {% block body %}
     <div class="container">
         <h1>User table</h1>
@@ -11,7 +13,7 @@
                     <th>{{ knp_pagination_sortable(users, 'Username', 'username') }}</th>
                     <th>{{ knp_pagination_sortable(users, 'Email', 'email') }}</th>
                     <th>{{ knp_pagination_sortable(users, 'Activity', 'activity') }}</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,7 +24,7 @@
                         <td>{{ user.email }}</td>
                         <td>
                             {% if user.activity %}
-                                <a href="#" class="btn btn-success">Activ</a>
+                                <a href="#" class="btn btn-success">Active</a>
                             {% else %}
                                 <a href="#" class="btn btn-danger">Inactive</a>
                             {% endif %}

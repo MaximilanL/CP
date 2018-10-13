@@ -1,13 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuizRepository")
@@ -15,48 +12,94 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Quiz
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="quiz", orphanRemoval=true)
+     * @ORM\Column(type="string", length=170)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createData;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Question", mappedBy="Quiz")
      */
     private $questions;
 
     /**
-     * @Assert\Type("string")
-     * @Assert\Length(
-     *      min = 3,
-     *      max = 220
-     * )
-     *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      */
-    private $title;
-
-    /**
-     * @Assert\Range(
-     *      min = 1,
-     *      max = 100,
-     *      minMessage = "Min value is {{ limit }}",
-     *      maxMessage = "Max value is {{ limit }}"
-     * )
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $percentageCorrectnessToWin;
+    private $rating;
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->timeStart = new \DateTime();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCreateData(): ?\DateTimeInterface
+    {
+        return $this->createData;
+    }
+
+    public function setCreateData(\DateTimeInterface $createData): self
+    {
+        $this->createData = $createData;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getRating(): ?array
+    {
+        return $this->rating;
+    }
+
+    public function setRating(array $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
     }
 
     /**
@@ -71,7 +114,7 @@ class Quiz
     {
         if (!$this->questions->contains($question)) {
             $this->questions[] = $question;
-            $question->setQuiz($this);
+            $question->addQuiz($this);
         }
 
         return $this;
@@ -81,34 +124,8 @@ class Quiz
     {
         if ($this->questions->contains($question)) {
             $this->questions->removeElement($question);
-            if ($question->getQuiz() === $this) {
-                $question->setQuiz(null);
-            }
+            $question->removeQuiz($this);
         }
-
-        return $this;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getPercentageCorrectnessToWin(): ?int
-    {
-        return $this->percentageCorrectnessToWin;
-    }
-
-    public function setPercentageCorrectnessToWin(int $percentageCorrectnessToWin): self
-    {
-        $this->percentageCorrectnessToWin = $percentageCorrectnessToWin;
 
         return $this;
     }

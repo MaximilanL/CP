@@ -4,24 +4,40 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Events;
+use App\Entity\User;
+use App\Form\UserType;
 use App\Form\EmailResetType;
 use App\Form\PasswordResetType;
-use App\Form\UserType;
-use App\Entity\User;
-use App\Events;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     /**
+     * @Route("/", name="index")
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        return $this->render('index.html.twig');
+    }
+
+    /**
      * @Route("/login", name="security_login")
+     *
+     * @param AuthenticationUtils $helper
+     *
+     * @return Response
      */
     public function login(AuthenticationUtils $helper): Response
     {
@@ -33,6 +49,12 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/register", name="user_registration")
+     *
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param EventDispatcherInterface $eventDispatcher
+     *
+     * @return Response
      */
     public function registerAction(
         Request                      $request,
@@ -49,6 +71,7 @@ class SecurityController extends AbstractController
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
             $user->setRoles(['ROLE_USER']);
+            $user->setActivity(false);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -67,6 +90,10 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/logout", name="security_logout")
+     *
+     * @throws \Exception
+     *
+     * @return void
      */
     public function logout(): void
     {
@@ -78,6 +105,7 @@ class SecurityController extends AbstractController
      *
      * @param Request $request
      * @param \Swift_Mailer $mailer
+     *
      * @return Response
      */
     public function resetPassword(
@@ -105,7 +133,7 @@ class SecurityController extends AbstractController
                     ->setTo($user->getEmail())
                     ->setBody(
                         $this->renderView(
-                            'Emails/recovery_password.html.twig', [
+                            'Others/Emails/recovery_password.html.twig', [
                             'token' => $token,
                         ]),
                         'text/html'
@@ -132,6 +160,8 @@ class SecurityController extends AbstractController
      *
      * @param Request $request
      * @param string $token
+     * @param UserPasswordEncoderInterface $encoder
+     *
      * @return Response
      */
     public function restore(

@@ -5,11 +5,11 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends Controller
 {
@@ -43,12 +43,14 @@ class UserController extends Controller
 
 
     /**
-     * @Route("/user/{id}", name="deleting_user")
+     * @Route("/user/{id}", name="deleting_user", requirements={"id"="\d+"})
      *
      * @Method({"DELETE"})
      *
      * @param Request $request
      * @param string $id
+     *
+     * @return void
      */
     public function delete(Request $request, string $id): void
     {
@@ -56,11 +58,15 @@ class UserController extends Controller
             ->getRepository(User::class)
             ->find($id);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($user);
-        $entityManager->flush();
+        if ($user) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
 
-        $response = new Response();
-        $response->send();
+            $response = new Response();
+            $response->send();
+        }
+
+        return;
     }
 }
