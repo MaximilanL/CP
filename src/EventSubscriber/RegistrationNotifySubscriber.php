@@ -7,10 +7,6 @@ use App\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-/**
- * Sending a welcome letter every time a user is created
- *
- */
 class RegistrationNotifySubscriber implements EventSubscriberInterface
 {
     private $mailer;

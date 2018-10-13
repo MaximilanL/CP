@@ -2,6 +2,7 @@
 
 {% block body %}
     <div class="container">
+        <h1>User table</h1>
         {% if users %}
             <table id="users" class="table table-striped">
                 <thead>
@@ -9,6 +10,7 @@
                     <th>{{ knp_pagination_sortable(users, 'Fullname', 'fullname') }}</th>
                     <th>{{ knp_pagination_sortable(users, 'Username', 'username') }}</th>
                     <th>{{ knp_pagination_sortable(users, 'Email', 'email') }}</th>
+                    <th>{{ knp_pagination_sortable(users, 'Activity', 'activity') }}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -18,6 +20,13 @@
                         <td>{{ user.fullname }}</td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.activity %}
+                                <a href="#" class="btn btn-success">Activ</a>
+                            {% else %}
+                                <a href="#" class="btn btn-danger">Inactive</a>
+                            {% endif %}
+                        </td>
                         <td><a href="#" class="btn btn-danger delete-user" data-id="{{ user.id }}">Delete</a></td>
                     </tr>
                 {% endfor %}

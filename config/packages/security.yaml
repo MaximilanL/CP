@@ -22,7 +22,7 @@ security:
                 default_target_path: main
 
             logout:
-                path: security_logout
+                handlers: [my_logout_handler]
                 target: index
 
     access_control:

@@ -50,6 +50,13 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $activity;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=64)
@@ -123,6 +130,16 @@ class User implements UserInterface, \Serializable
         $this->email = $email;
     }
 
+    public function setActivity(bool $activity): void
+    {
+        $this->activity = $activity;
+    }
+
+    public function getActivity(): bool
+    {
+        return $this->activity;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -172,7 +189,6 @@ class User implements UserInterface, \Serializable
         // But it is necessary, because it is included in the UserInterface interface
         // $ this-> plainPassword = null;
     }
-
 
     public function serialize(): string
     {
