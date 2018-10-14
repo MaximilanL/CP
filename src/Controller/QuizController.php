@@ -4,8 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategy;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -42,7 +44,7 @@ class QuizController extends Controller
     }
 
     /**
-     * @Route("/quiz/{active}/{id}", name="deleting_quiz", requirements={"id"="\d+"})
+     * @Route("/quiz/{id}/{active}", name="deleting_quiz", requirements={"id"="\d+"})
      *
      * @param Request $request
      * @param string $id
@@ -51,22 +53,51 @@ class QuizController extends Controller
      *
      * @return Response
      */
-    public function delete(Request $request, string $active, string $id, QuizRepository $repository): Response
+    public function delete(
+        Request $request,
+        string $active,
+        string $id,
+        QuizRepository $repository
+    ): Response
     {
         $quiz = $repository->find($id);
         $em = $this->getDoctrine()->getManager();
 
-        if ($quiz && $active === "delete") {
-            $em->remove($quiz);
-            $em->flush();
-        }
+        if ($quiz) {
+            if ($active === "delete") {
+                $em->remove($quiz);
+                $em->flush();
+            }
 
-        if ($quiz && $active === "reactive") {
-            $quiz->setIsActive($quiz->getIsActive() === false ? true : false);
-            $em->persist($quiz);
-            $em->flush();
+            if ($active === "reactive") {
+                $quiz->setIsActive($quiz->getIsActive() === false ? true : false);
+                $em->persist($quiz);
+                $em->flush();
+            }
         }
 
         return new Response();
+    }
+
+    /**
+     * @Route("/quiz/show/{id}", name="quiz_show", requirements={"id"="\d+"})
+     *
+     * @param string $id
+     * @param QuizRepository $quizRepository
+     *
+     * @return Response
+     */
+    public function show(string $id, QuizRepository $quizRepository): Response
+    {
+        $quiz = $quizRepository->find($id);
+
+
+        if ($quiz) {
+           return $this->render("Quiz/quiz.html.twig", [
+               "quiz" => $quiz
+           ]);
+        }
+
+        return $this->redirectToRoute("quiz_index");
     }
 }

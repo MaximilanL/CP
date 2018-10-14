@@ -34,7 +34,7 @@ if (quiz) {
             if (confirm("Are you sure?")) {
                 var id = e.target.getAttribute('data-id');
 
-                fetch('/quiz/delete/' + id, {
+                fetch('/quiz/' + id + '/delete', {
                     method: 'POST'
                 }).then(res => window.location.reload());
             }
@@ -45,7 +45,7 @@ if (quiz) {
             if (confirm("Are you sure?")) {
                 var idActivator = e.target.getAttribute('data-id');
 
-                fetch('/quiz/reactive/' + idActivator, {
+                fetch('/quiz/' + idActivator + '/reactive', {
                     method: 'POST'
                 }).then(res => window.location.reload());
             }

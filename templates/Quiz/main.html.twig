@@ -5,16 +5,16 @@
 {% block body %}
 
     <div class="container">
-        <h1>Quiz Create</h1>
+        <h1>All quizzes</h1>
 
         <table id="quiz" class="table">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Birthtime</th>
+                <th>{{ knp_pagination_sortable(quizzes, 'Name', 'name') }}</th>
+                <th>{{ knp_pagination_sortable(quizzes, 'Birthtime', 'createdate') }}</th>
                 <th>Top player</th>
-                {%  if app.user.roles==["ROLE_ADMIN"] %}
-                    <th>Status</th>
+                {% if app.user.roles==["ROLE_ADMIN"] %}
+                    <th>{{ knp_pagination_sortable(quizzes, 'Status', 'isactive') }}</th>
                 {% endif %}
                 <th>Actions</th>
             </tr>
@@ -45,7 +45,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="#" class="btn btn-success btn-sm">Play</a>
+                        <a href="{{ path('quiz_show', {'id': quiz.id}) }}" class="btn btn-success btn-sm">Play</a>
                         {%  if app.user.roles==["ROLE_ADMIN"] %}
                             <a href="#" class="btn btn-outline-warning btn-sm">Edit</a>
                             <a href="#" class="btn btn-outline-secondary btn-sm" data-id="{{ quiz.id }}">Delete</a>

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ quiz.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="container text-center">
+        <h1>{{ quiz.name }}</h1>
+        <br>
+        <h3>Create Date</h3>
+        <h3>{{ quiz.createData|date("F jS \\a\\t g:ia") }}</h3>
+
+        <br><br>
+        <div id="quiz">
+            <a href="#" class="btn btn-success">Play</a>
+            {%  if app.user.roles==["ROLE_ADMIN"] %}
+                <a href="#" class="btn btn-outline-warning btn-sm">Edit</a>
+                <a href="#" class="btn btn-outline-secondary btn-sm" data-id="{{ quiz.id }}">Delete</a>
+            {% endif %}
+        </div>
+
+        <br><br>
+        <h3>Top Players</h3>
+        {% if quiz.rating %}
+            {% for key, rate in quiz.rating|sort%}
+                <div>{{ key }}</div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+{% endblock %}
