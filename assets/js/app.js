@@ -12,15 +12,41 @@ require('../css/app.css');
 // var $ = require('jquery');
 
 const user = document.getElementById("users");
+const quiz = document.getElementById("quiz");
 
 if (user) {
     user.addEventListener("click", e => {
         if (e.target.className === "btn btn-danger delete-user") {
             if (confirm("Are you sure?")) {
-                const id = e.target.getAttribute('data-id');
+                var id = e.target.getAttribute('data-id');
 
                 fetch('/user/' + id, {
                     method: 'DELETE'
+                }).then(res => window.location.reload());
+            }
+        }
+    })
+}
+
+if (quiz) {
+    quiz.addEventListener("click", e => {
+        if (e.target.className === "btn btn-outline-secondary btn-sm") {
+            if (confirm("Are you sure?")) {
+                var id = e.target.getAttribute('data-id');
+
+                fetch('/quiz/delete/' + id, {
+                    method: 'POST'
+                }).then(res => window.location.reload());
+            }
+        }
+
+        if (e.target.className === "btn btn-outline-success btn-sm" ||
+            e.target.className === "btn btn-outline-danger btn-sm") {
+            if (confirm("Are you sure?")) {
+                var idActivator = e.target.getAttribute('data-id');
+
+                fetch('/quiz/reactive/' + idActivator, {
+                    method: 'POST'
                 }).then(res => window.location.reload());
             }
         }

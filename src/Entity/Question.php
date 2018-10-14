@@ -32,7 +32,7 @@ class Question
     private $answers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Quiz", inversedBy="Question")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Quiz", inversedBy="questions")
      */
     private $quiz;
 

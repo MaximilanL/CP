@@ -3,9 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Quiz;
+use App\Entity\Question;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Validator\Constraints\Date;
 
 class QuizzesFixtures extends Fixture
 {
@@ -18,6 +18,15 @@ class QuizzesFixtures extends Fixture
             $quiz->setCreateData(new \DateTime());
             $quiz->setRating($rating);
 
+            foreach ($this->getAnswersData() as [$question, $answers]) {
+                $ques = new Question();
+                $ques->setQuestion($question);
+                $ques->setAnswers($answers);
+                $quiz->addQuestion($ques);
+
+                $manager->persist($ques);
+            }
+
             $manager->persist($quiz);
         }
 
@@ -27,9 +36,18 @@ class QuizzesFixtures extends Fixture
     private function getQuizData(): array
     {
         return [
-            ['Mathematics', '1', []],
-            ['Physics', '1', []],
-            ['Biology', '1', []]
+            ['Mathematics', '1', ["admin" => [200, 1], "root" => [300, 2]]],
+            ['Physics', '1', ["admin" => [500, 1] , "root" => [600, 1]]],
+            ['Biology', '1', ["admin" => [344, 2], "root" => [333, 4]]]
+        ];
+    }
+
+    private function getAnswersData(): array
+    {
+        return [
+            ['2 + 2 = ?', ["4" => true, "8" => false, "2" => false, "6" => false]],
+            ['3 + 3 = ?', ["4" => false, "8" => false, "2" => false, "6" => true]],
+            ['4 + 4 = ?', ["4" => false, "8" => true , "2" => false, "6" => false]]
         ];
     }
 }

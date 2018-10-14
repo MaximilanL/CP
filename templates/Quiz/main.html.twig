@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quiz index{% endblock %}
+{% block title %}Quizzes{% endblock %}
 
 {% block body %}
 
     <div class="container">
         <h1>Quiz Create</h1>
 
-        <table class="table">
+        <table id="quiz" class="table">
             <thead>
             <tr>
                 <th>Name</th>
@@ -20,29 +20,35 @@
             </tr>
             </thead>
             <tbody>
-            {% for quiz in quizzes %}
+            {% for quiz in quizzes if (app.user.roles==["ROLE_ADMIN"])
+                                   or (not app.user.roles==["ROLE_ADMIN"]
+                                   and quiz.isActive) %}
                 <tr>
                     <td>{{ quiz.name }}</td>
                     <td>{{ quiz.createData|date("F jS \\a\\t g:ia") }}</td>
                     <td>
                         {% if quiz.rating %}
-                            {{ quiz.rating.0 }}
+                            {% for key, rate in quiz.rating|sort%}
+                                {% if loop.first %}
+                                    {{ key }}
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     </td>
                     {%  if app.user.roles==["ROLE_ADMIN"] %}
                         <td>
                             {% if quiz.isActive %}
-                                <a href="#" class="btn btn-outline-success btn-sm">Active</a>
+                                <a href="#" class="btn btn-outline-success btn-sm" data-id="{{ quiz.id }}">Active</a>
                             {% else %}
-                                <a href="#" class="btn btn-outline-danger btn-sm">Inactive</a>
+                                <a href="#" class="btn btn-outline-danger btn-sm" data-id="{{ quiz.id }}">Inactive</a>
                             {% endif %}
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{#{{ path('quiz_edit', {'id': quiz.id}) }}#}" class="btn btn-success btn-sm">Play</a>
+                        <a href="#" class="btn btn-success btn-sm">Play</a>
                         {%  if app.user.roles==["ROLE_ADMIN"] %}
-                            <a href="{#{{ path('quiz_edit', {'id': quiz.id}) }}#}" class="btn btn-outline-secondary btn-sm">Edit</a>
-                            <a href="{#{{ path('quiz_show', {'id': quiz.id}) }}#}" class="btn btn-outline-secondary btn-sm">Delete</a>
+                            <a href="#" class="btn btn-outline-warning btn-sm">Edit</a>
+                            <a href="#" class="btn btn-outline-secondary btn-sm" data-id="{{ quiz.id }}">Delete</a>
                         {% endif %}
                     </td>
                 </tr>

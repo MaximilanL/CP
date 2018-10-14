@@ -34,7 +34,7 @@ class Quiz
     private $isActive;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Question", mappedBy="Quiz")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Question", mappedBy="quiz")
      */
     private $questions;
 
