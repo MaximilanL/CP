@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ quiz.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="container text-center">
+        <h1>{{ quiz.name }}</h1>
+
+        <h4>Question number {{ orderQuestion + 1 }}:</h4>
+        <div class="question">
+            <h4>{{ question.question }}</h4>
+            <br>
+            <form>
+                <fieldset>
+                    <legend>Select your answer:</legend>
+
+                    <div id="answers">
+                        {% for key, answer in question.answers %}
+                            <div>
+                                <input type="radio" id="{{ question.id }}"
+                                       name="answer" data-id="{{ question.id }}" value="{{ key }}"/>
+                                <label for="{{ question.id }}">{{ key }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+
+        <br><br>
+        <div id="replies">
+            <a href="{{ path("quiz_index") }}" class="btn btn-outline-warning btn-sm">Back</a>
+
+            <a href="#" class="btn btn-success">Reply</a>
+
+            {% if (count - 1) != (orderQuestion) %}
+                <a href="{{ path("quiz_play",{"id": quiz.id, "orderQuestion": orderQuestion + 1}) }}"
+                   class=" d-none btn btn-outline-success btn-sm"
+                   id="secret-button">Next</a>
+            {% else %}
+                <a href="{{ path("quiz_show", {"id": quiz.id}) }}"
+                   class=" d-none btn btn-outline-success btn-sm"
+                   id="secret-button">Finish</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

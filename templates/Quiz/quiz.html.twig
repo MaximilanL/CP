@@ -12,12 +12,16 @@
 
         <br><br>
         <div id="quiz">
-            <a href="#" class="btn btn-success">Play</a>
+            <a href="{{ path('quiz_play', {'id': quiz.id, 'orderQuestion': 0}) }}" class="btn btn-success">Play</a>
             {%  if app.user.roles==["ROLE_ADMIN"] %}
                 <a href="#" class="btn btn-outline-warning btn-sm">Edit</a>
                 <a href="#" class="btn btn-outline-secondary btn-sm" data-id="{{ quiz.id }}">Delete</a>
             {% endif %}
         </div>
+
+        <h3>Your rating:</h3>
+
+        <div>{{ app.user.rating|first }}</div>
 
         <br><br>
         <h3>Top Players</h3>

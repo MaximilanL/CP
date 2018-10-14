@@ -26,6 +26,7 @@ class UsersFixtures extends Fixture
             $user->setEmail($email);
             $user->setActivity($activity);
             $user->setRoles($roles);
+            $user->setRating([]);
 
             $manager->persist($user);
             $this->addReference($username, $user);

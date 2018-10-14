@@ -52,3 +52,34 @@ if (quiz) {
         }
     })
 }
+
+const reply = document.getElementById("replies");
+
+if (reply) {
+    reply.addEventListener("click", e => {
+        if (e.target.className === "btn btn-success") {
+            var answer = document.querySelector('input[name="answer"]:checked').value;
+            var id = document.querySelector('input[name="answer"]:checked').getAttribute('data-id');
+            var change = document.getElementById("answers");
+
+            fetch('/check/' + id + '/' + answer, {
+                method: 'POST'
+            }).then(function(response) {
+                var button = document.getElementById("secret-button");
+                button.classList.remove("d-none");
+
+                if (response.status === 200) {
+                    e.target.className = "btn btn-success btn-lg";
+                    e.target.innerHTML = "CORRECT";
+
+                    change.innerHTML = answer;
+                } else {
+                    e.target.className = "btn btn-danger btn-lg";
+                    e.target.innerHTML = "INCORRECT";
+
+                    change.innerHTML = answer;
+                }
+            });
+        }
+    })
+}

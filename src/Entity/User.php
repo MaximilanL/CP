@@ -78,9 +78,16 @@ class User implements UserInterface, \Serializable
     private $resetPassword;
 
     /**
+     * @var string
+     *
      * @Assert\Length(max=4096)
      */
     private $plainPassword;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $rating = [];
 
     public function getResetPassword(): ?string
     {
@@ -199,5 +206,17 @@ class User implements UserInterface, \Serializable
     public function unserialize($serialized): void
     {
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function getRating(): ?array
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?array $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
     }
 }
