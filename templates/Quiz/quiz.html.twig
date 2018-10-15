@@ -12,22 +12,31 @@
 
         <br><br>
         <div id="quiz">
-            <a href="{{ path('quiz_play', {'id': quiz.id, 'orderQuestion': 0}) }}" class="btn btn-success">Play</a>
+            {% if rate == 0 %}
+                <a href="{{ path('quiz_play', {'id': quiz.id, 'orderQuestion': 0}) }}" class="btn btn-success">Play</a>
+            {% endif %}
             {%  if app.user.roles==["ROLE_ADMIN"] %}
                 <a href="#" class="btn btn-outline-warning btn-sm">Edit</a>
                 <a href="#" class="btn btn-outline-secondary btn-sm" data-id="{{ quiz.id }}">Delete</a>
             {% endif %}
         </div>
 
-        <h3>Your rating:</h3>
+        <br>
 
-        <div>{{ app.user.rating|first }}</div>
+        <h3>Your Score:</h3>
+        <div>
+            {% if rate != 0 %}
+                <span>Score: </span>
+                {{ rate }}
+                <br>
+            {% endif %}
+        </div>
 
-        <br><br>
+        <br>
         <h3>Top Players</h3>
         {% if quiz.rating %}
-            {% for key, rate in quiz.rating|sort%}
-                <div>{{ key }}</div>
+            {% for key, rate in quiz.rating|sort|reverse %}
+                <div style="color:{% if key == app.user.username %} red {% endif %}">{{ key }}</div>
             {% endfor %}
         {% endif %}
 

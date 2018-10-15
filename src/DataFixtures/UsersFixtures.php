@@ -26,7 +26,13 @@ class UsersFixtures extends Fixture
             $user->setEmail($email);
             $user->setActivity($activity);
             $user->setRoles($roles);
-            $user->setRating([]);
+            $user->setRating(
+                ["Mathematics" => [["date" => "2018-10-15 01:20:13.823679", "timezone" => "Europe/Moscow", "timezone_type" => 3],
+                    "",
+                    "",
+                    0,
+                    0
+                ]]);
 
             $manager->persist($user);
             $this->addReference($username, $user);

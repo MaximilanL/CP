@@ -61,8 +61,9 @@ if (reply) {
             var answer = document.querySelector('input[name="answer"]:checked').value;
             var id = document.querySelector('input[name="answer"]:checked').getAttribute('data-id');
             var change = document.getElementById("answers");
+            var quizName = document.getElementById("name").getAttribute('data-id');
 
-            fetch('/check/' + id + '/' + answer, {
+            fetch('/check/' + id + '/' + answer + "/" + quizName, {
                 method: 'POST'
             }).then(function(response) {
                 var button = document.getElementById("secret-button");

@@ -58,7 +58,7 @@ class QuizController extends Controller
         string $active,
         string $id,
         QuizRepository $repository
-    ): Response
+        ): Response
     {
         $quiz = $repository->find($id);
         $em = $this->getDoctrine()->getManager();
@@ -89,8 +89,46 @@ class QuizController extends Controller
      */
     public function show(string $id, Quiz $quiz): Response
     {
+        $user = $this->getUser();
+        $question = $quiz->getQuestions();
+
+        $stopQuestion = count($question);
+
+        $rating = $user->getRating();
+        $quizName = $quiz->getName();
+        $rate = 0;
+        $time = null;
+
+        if (!array_key_exists($quizName, $rating)) {
+            $rating[$quizName] = [
+                new \DateTime(),
+                "",
+                "",
+                0,
+                0
+            ];
+            $user->setRating($rating);
+        } else {
+
+            $rate = $rating[$quizName][3];
+            $stop = $rating[$quizName][4];
+
+            if (($stop !== $stopQuestion)) {
+                return $this->redirectToRoute("quiz_play", [
+                    "id" => $id,
+                    "orderQuestion" => $stop
+                ]);
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
         if ($quiz) {
            return $this->render("Quiz/quiz.html.twig", [
+               "rate" => $rate,
+               "time" => $time,
                "quiz" => $quiz
            ]);
         }
@@ -99,44 +137,21 @@ class QuizController extends Controller
     }
 
     /**
-     * @Route("/quiz/play/quiz/{id}/{orderQuestion}", name="quiz_play", requirements={"id"="\d+", "question"="\d+"})
+     * @Route("/quiz/play/{id}/{orderQuestion}", name="quiz_play", requirements={"id"="\d+", "question"="\d+"})
      *
      * @param int $orderQuestion
      * @param Quiz $quiz
-     * @param User $user
      *
      * @return Response
      */
     public function play(
         int $orderQuestion,
-        Quiz $quiz,
-        User $user
+        Quiz $quiz
     ): Response
     {
-        $rating[] = $user->getRating();
-        $quizName = $quiz->getName();
-        $rate = "";
-
-        if (!array_key_exists($quizName, $rating)) {
-            $rating[] = [$quizName => [
-                new \DateTime(),
-                0,
-                0,
-                0
-            ]];
-            $user->setRating($rating);
-        } else {
-            $rate = $rating[$quizName][2];
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
-
         $question = $quiz->getQuestions();
 
         return $this->render("Quiz/play.html.twig", [
-            "rate" => $rate,
             "quiz" => $quiz,
             "count" => count($question),
             "question" => $question[$orderQuestion],
@@ -145,31 +160,35 @@ class QuizController extends Controller
     }
 
     /**
-     * @Route("/check/{id}/{answer}", name="answer_check", requirements={"id"="\d+", "answer"="\d+"})
+     * @Route("/check/{id}/{answer}/{quizId}",
+     *     name="answer_check",
+     *     requirements={"id"="\d+", "answer"="\d+", "quizId"="\d+"})
      *
      * @param string $answer
      * @param QuestionRepository $questionRepository
      * @param string $id
-     * @param User $user
-     * @param Quiz $quiz
+     * @param string $quizId
+     * @param QuizRepository $quizRepository
      *
      * @return Response
      */
     public function check(
         string $id,
         string $answer,
-        QuestionRepository $questionRepository,
-        User $user,
-        Quiz $quiz
+        string $quizId,
+        QuizRepository $quizRepository,
+        QuestionRepository $questionRepository
     ): Response
     {
         $question = $questionRepository->find($id);
+        $user = $this->getUser();
 
-        $rating[] = $user->getRating();
-        $quizName = $quiz->getName();
+        $rating = $user->getRating();
+        $quizName = $quizRepository->find($quizId)->getName();
+        $rating[$quizName][4]++;
 
         if ($question->getAnswers()[$answer]) {
-            var_dump($rating[$quizName][3]++);
+            $rating[$quizName][3]++;
             $user->setRating($rating);
 
             $em = $this->getDoctrine()->getManager();
@@ -177,6 +196,11 @@ class QuizController extends Controller
             $em->flush();
             return new Response();
         } else {
+            $user->setRating($rating);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
             return new Response("", 303);
         }
     }
@@ -185,28 +209,35 @@ class QuizController extends Controller
      * @Route("/finish/quiz/{id}", name="quiz_finish", requirements={"id"="\d+"})
      *
      * @param string $id
-     * @param Quiz $quiz
-     * @param User $user
+     * @param QuizRepository $quizRepository
      *
      * @return Response
      */
-    public function finish(User $user, string $id, Quiz $quiz): Response
+    public function finish(string $id, QuizRepository $quizRepository): Response
     {
-        $startTime = $user->getRating()[$quiz->getName()][0];
-        $endTime = new \DateTime();
-        $time = $endTime - $startTime;
-        $point = $user->getRating()[$quiz->getName()][3];
+        $user = $this->getUser();
+        $quiz = $quizRepository->find($id);
+        $quizName = $quiz->getName();
 
-        $rating[] = [
-            $quiz->getName() => [
-                $startTime,
-                $endTime,
-                $time,
-                $point
-            ]
-        ];
+        $startTime = new \DateTime($user->getRating()[$quizName][0]["date"]);
+        $endTime = new \DateTime();
+        $time = $startTime->diff($endTime);
+        $point = $user->getRating()[$quizName][3];
+        $stop = $user->getRating()[$quizName][4];
+
+        $rating[$quizName][0] = $startTime;
+        $rating[$quizName][1] = $endTime;
+        $rating[$quizName][2] = $time;
+        $rating[$quizName][3] = $point;
+        $rating[$quizName][4] = $stop;
 
         $user->setRating($rating);
+
+        $topPlayers = $quiz->getRating();
+
+        $topPlayers[$user->getUsername()] = [intval($time->format("%s")), $point];
+
+        $quiz->setRating($topPlayers);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);

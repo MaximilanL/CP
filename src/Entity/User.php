@@ -85,9 +85,9 @@ class User implements UserInterface, \Serializable
     private $plainPassword;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $rating = [];
+    private $rating;
 
     public function getResetPassword(): ?string
     {

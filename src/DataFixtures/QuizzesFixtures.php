@@ -11,12 +11,12 @@ class QuizzesFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        foreach ($this->getQuizData() as [$name, $activity]) {
+        foreach ($this->getQuizData() as [$name, $activity, $rating]) {
             $quiz = new Quiz();
             $quiz->setName($name);
             $quiz->setIsActive($activity);
             $quiz->setCreateData(new \DateTime());
-            $quiz->setRating(null);
+            $quiz->setRating($rating);
 
             foreach ($this->getAnswersData() as [$question, $answers]) {
                 $ques = new Question();
