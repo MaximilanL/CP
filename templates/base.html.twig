@@ -28,7 +28,7 @@
                         <ul class="navbar-nav ml-auto">
                             {%  if app.user.roles==["ROLE_ADMIN"] %}
                                 <li class="nav-item">
-                                    <a href="{{ path('quiz_index') }}" class="nav-link">Create new quiz</a>
+                                    <a href="{{ path('quiz_create') }}" class="nav-link">Create new quiz</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ path('userList') }}" class="nav-link">User control</a>

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create new Quiz{% endblock %}
+
+{% block body %}
+
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+    <div class="container formSecurity">
+        <legend class="text-center">Enter your question</legend>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-primary center">Create this quiestion</button>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

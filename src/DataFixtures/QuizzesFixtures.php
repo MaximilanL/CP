@@ -22,10 +22,11 @@ class QuizzesFixtures extends Fixture
                 $ques = new Question();
                 $ques->setQuestion($question);
                 $ques->setAnswers($answers);
-                $quiz->addQuestion($ques);
 
                 $manager->persist($ques);
             }
+
+            $quiz->addQuestion($ques);
 
             $manager->persist($quiz);
         }
