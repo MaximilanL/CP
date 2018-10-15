@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class EditorController extends Controller
 {
@@ -135,5 +136,29 @@ class EditorController extends Controller
         return $this->render('Editor/create-question.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/question/{id}/delete", name="deleting_question", requirements={"id"="\d+"})
+     *
+     * @param string $id
+     * @param QuestionRepository $questionRepository
+     *
+     * @return Response
+     */
+    public function delete(
+        string $id,
+        QuestionRepository $questionRepository
+    ): Response
+    {
+        $question = $questionRepository->find($id);
+        $em = $this->getDoctrine()->getManager();
+
+        if ($question) {
+            $em->remove($question);
+            $em->flush();
+        }
+
+        return new Response();
     }
 }

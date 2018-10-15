@@ -47,12 +47,11 @@ class UserController extends Controller
      *
      * @Method({"DELETE"})
      *
-     * @param Request $request
      * @param string $id
      *
      * @return void
      */
-    public function delete(Request $request, string $id): void
+    public function delete(string $id): void
     {
         $user = $this->getDoctrine()
             ->getRepository(User::class)

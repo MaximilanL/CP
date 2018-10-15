@@ -44,7 +44,7 @@ class QuizController extends Controller
     }
 
     /**
-     * @Route("/quiz/{id}/{active}", name="deleting_quiz", requirements={"id"="\d+"})
+     * @Route("/quiz/{id}/{active}", name="deleting_quiz", requirements={"id"="\d+", "active"="\d+"})
      *
      * @param Request $request
      * @param string $id
@@ -53,7 +53,7 @@ class QuizController extends Controller
      *
      * @return Response
      */
-    public function delete(
+    public function deleting(
         Request $request,
         string $active,
         string $id,

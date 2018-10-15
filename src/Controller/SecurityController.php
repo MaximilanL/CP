@@ -9,9 +9,10 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Form\EmailResetType;
 use App\Form\PasswordResetType;
+use App\Repository\QuestionRepository;
+use App\Repository\QuizRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -199,5 +200,77 @@ class SecurityController extends AbstractController
         return $this->render('Security/Reset/reset-password-confirmation.html.twig', [
             "message" => "Something get wrong. Try again later"
         ]);
+    }
+
+    /*Эти методы я добавил в этот контроллер по ошибке,
+    но если их перенести в тот контроллер, где они должны находиться,
+    то перестают работать аннотации и аякс не может подгрузить эти методы.*/
+
+    /**
+     * @Route("/question/{id}/delete", name="deleting_question", requirements={"id"="\d+"})
+     *
+     * @param string $id
+     * @param QuestionRepository $questionRepository
+     *
+     * @return Response
+     */
+    public function delete(
+        string $id,
+        QuestionRepository $questionRepository
+    ): Response
+    {
+        $question = $questionRepository->find($id);
+        $em = $this->getDoctrine()->getManager();
+
+        if ($question) {
+            $em->remove($question);
+            $em->flush();
+        }
+
+        return new Response();
+    }
+
+    /**
+     * @Route("/question/{active}/{idQuestion}/{idQuiz}",
+     *     name="deleting_quiz",
+     *     requirements={"idQuestion"="\d+", "idQuiz"="\d+"})
+     *
+     * @param string $idQuestion
+     * @param string $active
+     * @param string $idQuiz
+     * @param QuestionRepository $questionRepository
+     * @param QuizRepository $quizRepository
+     *
+     * @return Response
+     */
+    public function changingQuestion(
+        string $active,
+        string $idQuiz,
+        string $idQuestion,
+        QuestionRepository $questionRepository,
+        QuizRepository $quizRepository
+    ): Response
+    {
+        $question = $questionRepository->find($idQuestion);
+        $quiz = $quizRepository->find($idQuiz);
+        $em = $this->getDoctrine()->getManager();
+
+        if ($question) {
+            if ($active === "delete") {
+                $quiz->removeQuestion($question);
+
+                $em->persist($quiz);
+                $em->flush();
+            }
+
+            if ($active === "active") {
+                $quiz->addQuestion($question);
+
+                $em->persist($question);
+                $em->flush();
+            }
+        }
+
+        return new Response();
     }
 }

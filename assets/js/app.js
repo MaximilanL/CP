@@ -11,8 +11,10 @@ require('../css/app.css');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // var $ = require('jquery');
 
-const user = document.getElementById("users");
 const quiz = document.getElementById("quiz");
+const user = document.getElementById("users");
+const reply = document.getElementById("replies");
+const control = document.getElementById("control");
 
 if (user) {
     user.addEventListener("click", e => {
@@ -53,8 +55,6 @@ if (quiz) {
     })
 }
 
-const reply = document.getElementById("replies");
-
 if (reply) {
     reply.addEventListener("click", e => {
         if (e.target.className === "btn btn-success") {
@@ -81,6 +81,38 @@ if (reply) {
                     change.innerHTML = answer;
                 }
             });
+        }
+    })
+}
+
+if (control) {
+    control.addEventListener("click", e => {
+        if (e.target.className === "btn btn-outline-secondary btn-sm") {
+            if (confirm("Are you sure?")) {
+                var id = e.target.getAttribute('data-id');
+
+                fetch('/question/' + id + '/delete', {
+                    method: 'POST'
+                }).then(res => window.location.reload());
+            }
+        }
+
+        var quizId = document.getElementById("quizId").getAttribute('data-id');
+
+        if (e.target.className === "btn btn-outline-success btn-sm") {
+            var idActivator = e.target.getAttribute('data-id');
+
+            fetch('/question/active/' + idActivator + '/' + quizId, {
+                method: 'DELETE'
+            }).then(res => window.location.reload());
+        }
+
+        if (e.target.className === "btn btn-outline-danger btn-sm") {
+            var idActivator = e.target.getAttribute('data-id');
+
+            fetch('/question/delete/' + idActivator + '/' + quizId, {
+                method: 'DELETE'
+            }).then(res => window.location.reload());
         }
     })
 }

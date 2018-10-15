@@ -5,9 +5,9 @@
 {% block body %}
 
     <div class="container">
-        <h1>{{ quiz.name }}</h1>
+        <h1 id="quizId" data-id="{{ quiz.id }}">{{ quiz.name }}</h1>
 
-        <table id="quiz" class="table">
+        <table id="control" class="table">
             <thead>
             <tr>
                 <th>{{ knp_pagination_sortable(questions, 'Question', 'question') }}</th>
