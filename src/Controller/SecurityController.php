@@ -202,37 +202,9 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /*Эти методы я добавил в этот контроллер по ошибке,
-    но если их перенести в тот контроллер, где они должны находиться,
-    то перестают работать аннотации и аякс не может подгрузить эти методы.*/
-
-    /**
-     * @Route("/question/{id}/delete", name="deleting_question", requirements={"id"="\d+"})
-     *
-     * @param string $id
-     * @param QuestionRepository $questionRepository
-     *
-     * @return Response
-     */
-    public function delete(
-        string $id,
-        QuestionRepository $questionRepository
-    ): Response
-    {
-        $question = $questionRepository->find($id);
-        $em = $this->getDoctrine()->getManager();
-
-        if ($question) {
-            $em->remove($question);
-            $em->flush();
-        }
-
-        return new Response();
-    }
-
     /**
      * @Route("/question/{active}/{idQuestion}/{idQuiz}",
-     *     name="deleting_quiz",
+     *     name="weqw",
      *     requirements={"idQuestion"="\d+", "idQuiz"="\d+"})
      *
      * @param string $idQuestion

@@ -44,18 +44,14 @@ class QuizController extends Controller
     }
 
     /**
-     * @Route("/quiz/{id}/{active}", name="deleting_quiz", requirements={"id"="\d+", "active"="\d+"})
+     * @Route("/quiz/delete/{id}", name="deleting_quiz", requirements={"id"="\d+"})
      *
-     * @param Request $request
      * @param string $id
-     * @param string $active
      * @param QuizRepository $repository
      *
      * @return Response
      */
     public function deleting(
-        Request $request,
-        string $active,
         string $id,
         QuizRepository $repository
         ): Response
@@ -64,19 +60,36 @@ class QuizController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($quiz) {
-            if ($active === "delete") {
-                $em->remove($quiz);
-                $em->flush();
-            }
-
-            if ($active === "reactive") {
-                $quiz->setIsActive($quiz->getIsActive() === false ? true : false);
-                $em->persist($quiz);
-                $em->flush();
-            }
+            $em->remove($quiz);
+            $em->flush();
         }
 
         return new Response();
+    }
+
+    /**
+     * @Route("/quizreactive/{id}", name="reactiving_quiz", requirements={"id"="\d+"})
+     *
+     * @param string $id
+     * @param QuizRepository $repository
+     *
+     * @return Response
+     */
+    public function reactiving(
+        string $id,
+        QuizRepository $repository
+    ): Response
+    {
+        $quiz = $repository->find($id);
+        $em = $this->getDoctrine()->getManager();
+
+        if ($quiz) {
+            $quiz->setIsActive($quiz->getIsActive() === false ? true : false);
+            $em->persist($quiz);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('quiz_index');
     }
 
     /**

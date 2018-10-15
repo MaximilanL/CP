@@ -36,22 +36,22 @@ if (quiz) {
             if (confirm("Are you sure?")) {
                 var id = e.target.getAttribute('data-id');
 
-                fetch('/quiz/' + id + '/delete', {
+                fetch('/quiz/delete/' + id, {
                     method: 'POST'
-                }).then(res => window.location.reload());
+                }).then(res => 0/*window.location.reload()*/);
             }
         }
 
-        if (e.target.className === "btn btn-outline-success btn-sm" ||
-            e.target.className === "btn btn-outline-danger btn-sm") {
-            if (confirm("Are you sure?")) {
-                var idActivator = e.target.getAttribute('data-id');
-
-                fetch('/quiz/' + idActivator + '/reactive', {
-                    method: 'POST'
-                }).then(res => window.location.reload());
-            }
-        }
+        // if (e.target.className === "btn btn-outline-success btn-sm" ||
+        //     e.target.className === "btn btn-outline-danger btn-sm") {
+        //     if (confirm("Are you sure?")) {
+        //         var idActivator = e.target.getAttribute('data-id');
+        //
+        //         fetch('/quiz/' + idActivator + '/reactive', {
+        //             method: 'POST'
+        //         }).then(res => window.location.reload());
+        //     }
+        // }
     })
 }
 

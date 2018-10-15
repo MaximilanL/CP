@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class EditorController extends Controller
@@ -78,7 +79,9 @@ class EditorController extends Controller
             $quiz = $form->getData();
             $quiz->setCreateData(new \DateTime());
             $quiz->setIsActive(true);
-            $quiz->setRating([]);
+            $quiz->setRating([
+                "root" => [0, 0]
+            ]);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($quiz);
