@@ -197,7 +197,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('Security/Reset/reset-password-confirmation.html.twig', [
-            "message" => "Somethin get wrong. Try again later"
+            "message" => "Something get wrong. Try again later"
         ]);
     }
 }
