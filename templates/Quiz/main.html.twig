@@ -21,7 +21,7 @@
             </thead>
             <tbody>
             {% for quiz in quizzes if (app.user.roles==["ROLE_ADMIN"])
-                                   or (not app.user.roles==["ROLE_ADMIN"]
+                                   or (app.user.roles==["ROLE_USER"]
                                    and quiz.isActive) %}
                 <tr>
                     <td>{{ quiz.name }}</td>

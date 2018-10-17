@@ -201,48 +201,4 @@ class SecurityController extends AbstractController
             "message" => "Something get wrong. Try again later"
         ]);
     }
-
-    /**
-     * @Route("/question/{active}/{idQuestion}/{idQuiz}",
-     *     name="weqw",
-     *     requirements={"idQuestion"="\d+", "idQuiz"="\d+"})
-     *
-     * @param string $idQuestion
-     * @param string $active
-     * @param string $idQuiz
-     * @param QuestionRepository $questionRepository
-     * @param QuizRepository $quizRepository
-     *
-     * @return Response
-     */
-    public function changingQuestion(
-        string $active,
-        string $idQuiz,
-        string $idQuestion,
-        QuestionRepository $questionRepository,
-        QuizRepository $quizRepository
-    ): Response
-    {
-        $question = $questionRepository->find($idQuestion);
-        $quiz = $quizRepository->find($idQuiz);
-        $em = $this->getDoctrine()->getManager();
-
-        if ($question) {
-            if ($active === "delete") {
-                $quiz->removeQuestion($question);
-
-                $em->persist($quiz);
-                $em->flush();
-            }
-
-            if ($active === "active") {
-                $quiz->addQuestion($question);
-
-                $em->persist($question);
-                $em->flush();
-            }
-        }
-
-        return new Response();
-    }
 }
