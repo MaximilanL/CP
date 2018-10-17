@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\QuestionRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use App\Entity\Quiz;
-use App\Entity\Question;
 use App\Repository\QuizRepository;
 
 class QuizController extends Controller
@@ -75,7 +73,7 @@ class QuizController extends Controller
      *
      * @return Response
      */
-    public function reactiving(
+    public function reactivity(
         string $id,
         QuizRepository $repository
     ): Response
@@ -103,14 +101,12 @@ class QuizController extends Controller
     public function show(string $id, Quiz $quiz): Response
     {
         $user = $this->getUser();
+
         $question = $quiz->getQuestions();
-
         $stopQuestion = count($question);
-
         $rating = $user->getRating();
         $quizName = $quiz->getName();
         $rate = 0;
-        $time = null;
 
         if (!array_key_exists($quizName, $rating)) {
             $rating[$quizName] = [
@@ -120,9 +116,9 @@ class QuizController extends Controller
                 0,
                 0
             ];
+
             $user->setRating($rating);
         } else {
-
             $rate = $rating[$quizName][3];
             $stop = $rating[$quizName][4];
 
@@ -141,11 +137,9 @@ class QuizController extends Controller
         if ($quiz) {
            return $this->render("Quiz/quiz.html.twig", [
                "rate" => $rate,
-               "time" => $time,
                "quiz" => $quiz
            ]);
         }
-
         return $this->redirectToRoute("quiz_index");
     }
 
@@ -193,27 +187,22 @@ class QuizController extends Controller
         QuestionRepository $questionRepository
     ): Response
     {
-        $question = $questionRepository->find($id);
         $user = $this->getUser();
-
-        $rating = $user->getRating();
         $quizName = $quizRepository->find($quizId)->getName();
+        $question = $questionRepository->find($id);
+        $rating = $user->getRating();
         $rating[$quizName][4]++;
+
+        $em = $this->getDoctrine()->getManager();
 
         if ($question->getAnswers()[$answer]) {
             $rating[$quizName][3]++;
             $user->setRating($rating);
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             return new Response();
         } else {
-            $user->setRating($rating);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
             return new Response("", 303);
         }
     }

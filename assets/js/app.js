@@ -18,14 +18,20 @@ const control = document.getElementById("control");
 
 if (user) {
     user.addEventListener("click", e => {
+        var id = e.target.getAttribute('data-id');
+
         if (e.target.className === "btn btn-danger delete-user") {
             if (confirm("Are you sure?")) {
-                var id = e.target.getAttribute('data-id');
-
                 fetch('/user/' + id, {
                     method: 'DELETE'
                 }).then(res => window.location.reload());
             }
+        }
+
+        if (e.target.className === "btn btn-warning reactivate-user") {
+            fetch('/user/reactivity/' + id, {
+                method: 'POST'
+            }).then(res => window.location.reload());
         }
     })
 }
@@ -38,7 +44,7 @@ if (quiz) {
 
                 fetch('/quiz/delete/' + id, {
                     method: 'POST'
-                }).then(res => 0/*window.location.reload()*/);
+                }).then(res => window.location.reload());
             }
         }
     })
@@ -47,27 +53,27 @@ if (quiz) {
 if (reply) {
     reply.addEventListener("click", e => {
         if (e.target.className === "btn btn-success") {
-            var answer = document.querySelector('input[name="answer"]:checked').value;
-            var id = document.querySelector('input[name="answer"]:checked').getAttribute('data-id');
-            var change = document.getElementById("answers");
-            var quizName = document.getElementById("name").getAttribute('data-id');
+            var answer      = document.querySelector('input[name="answer"]:checked').value,
+                id          = document.querySelector('input[name="answer"]:checked').getAttribute('data-id'),
+                change      = document.getElementById("answers"),
+                quizName    = document.getElementById("name").getAttribute('data-id'),
+                button      = document.getElementById("secret-button");
 
             fetch('/check/' + id + '/' + answer + "/" + quizName, {
                 method: 'POST'
             }).then(function(response) {
-                var button = document.getElementById("secret-button");
                 button.classList.remove("d-none");
 
                 if (response.status === 200) {
-                    e.target.className = "btn btn-success btn-lg";
-                    e.target.innerHTML = "CORRECT";
+                    e.target.className  = "btn btn-success btn-lg";
+                    e.target.innerHTML  = "CORRECT";
 
-                    change.innerHTML = answer;
+                    change.innerHTML    = answer;
                 } else {
-                    e.target.className = "btn btn-danger btn-lg";
-                    e.target.innerHTML = "INCORRECT";
+                    e.target.className  = "btn btn-danger btn-lg";
+                    e.target.innerHTML  = "INCORRECT";
 
-                    change.innerHTML = answer;
+                    change.innerHTML    = answer;
                 }
             });
         }
@@ -86,10 +92,10 @@ if (control) {
             }
         }
 
-        var quizId = document.getElementById("quizId").getAttribute('data-id');
+        var idActivator = e.target.getAttribute('data-id'),
+            quizId      = document.getElementById("quizId").getAttribute('data-id');
 
         if (e.target.className === "btn btn-outline-success btn-sm") {
-            var idActivator = e.target.getAttribute('data-id');
 
             fetch('/question/active/' + idActivator + '/' + quizId, {
                 method: 'DELETE'
@@ -97,7 +103,6 @@ if (control) {
         }
 
         if (e.target.className === "btn btn-outline-danger btn-sm") {
-            var idActivator = e.target.getAttribute('data-id');
 
             fetch('/question/delete/' + idActivator + '/' + quizId, {
                 method: 'DELETE'

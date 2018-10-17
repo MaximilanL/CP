@@ -29,7 +29,12 @@
                                 <a href="#" class="btn btn-danger">Inactive</a>
                             {% endif %}
                         </td>
-                        <td><a href="#" class="btn btn-danger delete-user" data-id="{{ user.id }}">Delete</a></td>
+                        <td>
+                            <a href="#" class="btn btn-danger delete-user" data-id="{{ user.id }}">Delete</a>
+                            {% if user.activity %}
+                                <a href="#" class="btn btn-warning reactivate-user" data-id="{{ user.id }}">Reactivate</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

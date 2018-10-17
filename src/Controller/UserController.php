@@ -68,4 +68,29 @@ class UserController extends Controller
 
         return;
     }
+
+    /**
+     * @Route("/user/reactivity/{id}", name="reactivity_user", requirements={"id"="\d+"})
+     *
+     * @Method({"POST"})
+     *
+     * @param int id
+     *
+     * @return Response
+     */
+    public function reactivatingUser(int $id): Response
+    {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($id);
+
+        if ($user) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $user->setActivity($user->getActivity() === false ? true : false);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return new Response();
+    }
 }

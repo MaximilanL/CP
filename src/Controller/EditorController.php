@@ -165,7 +165,7 @@ class EditorController extends Controller
 
     /**
      * @Route("/question/{active}/{idQuestion}/{idQuiz}",
-     *     name="delete_question_reactive",
+     *     name="question_reactive",
      *     requirements={"idQuestion"="\d+", "idQuiz"="\d+"})
      *
      * @param string $idQuestion
@@ -191,17 +191,14 @@ class EditorController extends Controller
         if ($question) {
             if ($active === "delete") {
                 $quiz->removeQuestion($question);
-
-                $em->persist($quiz);
-                $em->flush();
             }
 
             if ($active === "active") {
                 $quiz->addQuestion($question);
-
-                $em->persist($question);
-                $em->flush();
             }
+
+            $em->persist($quiz);
+            $em->flush();
         }
 
         return new Response();
